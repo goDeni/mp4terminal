@@ -107,7 +107,7 @@ def view_video(video_path: str):
             for height_idx in range(height):
                 for width_idx in range(width):
                     red, green, blue = frame[height_idx][width_idx]
-                    stdout.write(f"\x1b[48;2;{red};{green};{blue}m ")
+                    stdout.write(f"\x1b[48;2;{blue};{green};{red}m ")
                 stdout.write(_RESET_FG + "\n")
 
             stdout.write(_format_time(monotonic() - start_time) + "\n")
