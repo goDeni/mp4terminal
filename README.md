@@ -4,7 +4,7 @@ Tool for watching mp4 video in terminal 😎
 
 Audio track supported too
 
-![Example](./example-pic.png)
+![Example](./pics/example.png)
 
 **Important dependency:** `ffmpeg` (using ffprobe tool)
 
