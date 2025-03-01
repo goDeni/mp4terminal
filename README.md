@@ -15,5 +15,5 @@ TODO:
 - [ ] Remove usage too much libraries
 - [ ] Rewind
 - [ ] Play/Pause
-- [+] mkv support
+- [x] mkv support
 - [ ] Rewrite in rust...
