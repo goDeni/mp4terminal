@@ -1,4 +1,3 @@
 res/
 .*
-*.lock
 __pycache__
