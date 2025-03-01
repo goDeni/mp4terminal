@@ -1,6 +1,7 @@
 from functools import cached_property
 from time import monotonic, sleep
 from typing import TextIO, Tuple
+from os import get_terminal_size
 
 from cursor import hide as cursor_hide
 from cursor import show as cursor_show
@@ -24,10 +25,19 @@ class TerminalPlayer:
         self._fps = fps
         self._duration = duration
 
-        self._width, self._height = resolution
+        self._width, self._height = 0, 0
+        self._update_resolution()
 
         self._frames_count: int = 0
         self._start_time: float = 0.0
+
+    def _update_resolution(self):
+        terminal_size = get_terminal_size()
+        resolution = _get_video_size(
+            self._resolution,
+            (terminal_size.columns, terminal_size.lines),
+        )
+        self._width, self._height = resolution
 
     @property
     def _video_resolution(self) -> Tuple[int, int]:
@@ -46,6 +56,7 @@ class TerminalPlayer:
         return self._width * 2
 
     def render_frame(self, frame: ndarray):
+        self._update_resolution()
         delta = (self._frame_duration * self._frames_count) - (
             monotonic() - self._start_time
         )
@@ -97,3 +108,25 @@ def _format_time(seconds: float):
         seconds -= minutes * 60
 
     return f"{minutes:-02}:{int(seconds):-02}"
+
+
+def _get_video_size(display_ratio: tuple[int, int], terminal_size: tuple[int, int]):
+    width_ratio, height_ratio = display_ratio
+    width, height = terminal_size
+
+    while width and height:
+        while width > 0 and width % width_ratio != 0:
+            width -= 1
+
+        while height > 0 and height % height_ratio != 0:
+            height -= 1
+
+        if width / width_ratio == height / height_ratio:
+            return width, height
+
+        if width / width_ratio > height / height_ratio:
+            width -= 1
+        else:
+            height -= 1
+
+    return terminal_size
